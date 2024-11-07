@@ -1,3 +1,4 @@
+import subprocess
 import torch
 from torch.utils.data import Dataset
 import gzip
@@ -8,10 +9,14 @@ class TokenizedChunksDataset(Dataset):
         self.file_path = file_path
         self.seq_len = seq_len
         self.data = []
+        total_lines = 1209636
+
+        total_lines = total_lines if lines_to_read is None else min(total_lines, lines_to_read)
+        print("Total lines: ", total_lines)
 
         with gzip.open(self.file_path, 'rt') as f:
             i = 0
-            for line in tqdm(f):
+            for line in tqdm(f, total=total_lines, desc="Reading file and loading it to the memory"):
                 if lines_to_read is not None and i > lines_to_read:
                     break
                 tokens = list(map(int, line.strip().split()))
