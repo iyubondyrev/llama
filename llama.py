@@ -34,7 +34,7 @@ class LLAMA(nn.Module):
         self.vocab_size = params.vocab_size
         self.num_layers = params.num_layers
         self.embeds = nn.Embedding(self.vocab_size, params.dim)
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.CrossEntropyLoss(label_smoothing=params.label_smoothing)
 
         self.layers = nn.ModuleList()
         for _ in range(params.num_layers):
@@ -57,6 +57,12 @@ class LLAMA(nn.Module):
             return {"loss": loss, "logits": logits}
         
         return {"logits": logits}
+    
+    def assert_min_params(self, min_params: int):
+        total_params = sum(p.numel() for name, p in self.named_parameters() if p.requires_grad and 'embeds' not in name)
+        print(f"Total parameters (excluding embeddings): {total_params}")
+        
+        assert total_params >= min_params, f"Model has {total_params} parameters (excluding embeddings), which is less than the required {min_params}."
 
 
 # params = LLAMAParams(
