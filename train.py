@@ -164,7 +164,9 @@ def main():
         logging_dir='./logs',
         logging_steps=args.logging_steps,
         evaluation_strategy="epoch",
-        report_to="wandb"
+        report_to="wandb",
+        dataloader_num_workers=8,
+        bf16=True,
     )
 
     trainer = Trainer(
