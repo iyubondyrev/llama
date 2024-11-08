@@ -18,4 +18,4 @@ python train.py \
     --random_seed 42 \
     --logging_steps 50 \
     --wandb_run_name "llama_run_02" \
-    --data_path "chunks.txt.gz"
+    --data_path "chunks.bin"
