@@ -101,6 +101,7 @@ def main():
     parser.add_argument("--max_seq_len", type=int, required=True)
     parser.add_argument("--num_layers", type=int, required=True)
     parser.add_argument("--num_heads", type=int, required=True)
+    parser.add_argument("--gradient_accumulation_steps", type=int, required=True)
     parser.add_argument("--warmup_steps", type=int, required=True)
     parser.add_argument("--lr", type=float, required=True)
     parser.add_argument("--max_grad_norm", type=float, required=True)
@@ -118,7 +119,7 @@ def main():
 
     seed(args.random_seed)
 
-    dataset = TokenizedChunksDataset(args.data_path, lines_to_read=3000)
+    dataset = TokenizedChunksDataset(args.data_path, lines_to_read=None)
 
     train_size = int(0.9 * len(dataset))
     eval_size = len(dataset) - train_size
@@ -131,6 +132,7 @@ def main():
         max_seq_len=args.max_seq_len,
         num_layers=args.num_layers,
         num_heads=args.num_heads,
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
         warmup_steps=args.warmup_steps,
         lr=args.lr,
         max_grad_norm=args.max_grad_norm,
@@ -156,6 +158,7 @@ def main():
         per_device_eval_batch_size=args.eval_batch_size,
         warmup_steps=args.warmup_steps,
         learning_rate=args.lr,
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
         max_grad_norm=args.max_grad_norm,
         weight_decay=args.weight_decay,
         logging_dir='./logs',
