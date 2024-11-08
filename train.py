@@ -5,7 +5,7 @@ from torch.utils.data import random_split
 from transformers import TrainingArguments, Trainer
 from dataclasses import dataclass
 import wandb
-from dataset import TokenizedChunksDataset
+from dataset import BinaryTokenDataset
 from llama import LLAMA
 from model_params import LLAMAParams
 import numpy as np
@@ -119,7 +119,7 @@ def main():
 
     seed(args.random_seed)
 
-    dataset = TokenizedChunksDataset(args.data_path, lines_to_read=None)
+    dataset = BinaryTokenDataset(args.data_path)
 
     train_size = int(0.9 * len(dataset))
     eval_size = len(dataset) - train_size
